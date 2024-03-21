@@ -11,7 +11,7 @@
 #include "Adafruit_PM25AQI.h"   // Para sensor PMSA0031
 
 
-//Para cambio de 
+//Para cambio de contraseña
 /****************************************************************************************************/
 // WiFi Credentials
 // Modify for assign your credentials
