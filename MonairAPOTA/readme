@@ -1,0 +1,105 @@
+# 🌬️ MonAir ESP32 - Monitor Ambiental con MQTT y OTA
+
+Este proyecto implementa un **monitor ambiental IoT** basado en ESP32, capaz de medir múltiples variables del aire como temperatura, humedad, presión, calidad del aire, concentración de partículas, entre otros. Se conecta vía WiFi, envía datos mediante **MQTT**, y permite actualizaciones inalámbricas por **OTA (Over-The-Air)**.
+
+## 🚀 Características principales
+
+- Conexión simultánea en modo **AP + STA**
+- Publicación de datos cada 10 minutos vía **MQTT**
+- Sensores soportados:
+  - **BME680** (IAQ, CO2, VOC, temperatura, humedad, presión)
+  - **DS18B20** (Temperatura externa)
+  - **PM2.5** (Adafruit PM2.5 Air Quality Sensor)
+- Indicadores RGB vía **NeoPixel**
+- Sincronización horaria vía **NTP**
+- Soporte completo para **OTA updates**
+- Reinicio automático cada 23 horas
+
+## 🛠️ Requisitos de hardware
+
+- ESP32
+- BME680 (via I2C)
+- Sensor PM2.5 (Adafruit PM2.5 AQI Sensor)
+- Sensor de temperatura DS18B20 (1-Wire)
+- Anillo o tira **NeoPixel** (16 LEDs)
+- Conexión WiFi
+
+## 🧰 Librerías utilizadas
+
+Asegúrate de tener instaladas estas librerías en el IDE de Arduino:
+
+- `WiFi.h`
+- `PubSubClient.h`
+- `Wire.h`
+- `bsec.h` (BME680 BSEC Library)
+- `NTPClient.h`
+- `WiFiUdp.h`
+- `Adafruit_NeoPixel.h`
+- `OneWire.h`
+- `DallasTemperature.h`
+- `Adafruit_PM25AQI.h`
+- `ArduinoOTA.h`
+
+## 📡 Configuración WiFi y MQTT
+
+Modifica las siguientes variables en el código:
+
+```cpp
+// WiFi
+const char* ssid_sta = "NOMBRE_DE_TU_RED";
+const char* password_sta = "CONTRASEÑA";
+
+// OTA
+const char* ota_password = "tu_password_ota";
+
+// Access Point (modo AP)
+const char *ap_ssid = "MonAirPrueba";
+const char *ap_password = "12345678";
+
+// MQTT
+const char *mqtt_server = "test.mosquitto.org"; // O tu broker privado
+const char *clientID = "airmonq_XXXXXX";        // Debe ser único por dispositivo
+
+**Los datos se publican en el topic base airmon/<ID>/, donde <ID> es el identificador del dispositivo. Por ejemplo:**
+
+swift
+Copiar
+Editar
+airmon/006570A0/temp
+airmon/006570A0/hume
+airmon/006570A0/pres
+airmon/006570A0/aqi
+airmon/006570A0/CO2e
+airmon/006570A0/pm25
+airmon/006570A0/pm10
+...
+
+✨ Indicadores con NeoPixel
+Color	Significado
+🔴 Rojo	WiFi desconectado
+🟡 Amarillo	Reconectando MQTT
+🟢 Verde	MQTT conectado exitosamente
+🔵 Azul	Publicación exitosa de datos
+
+♻️ Ciclos automáticos
+Los datos se publican cada 10 minutos
+
+El dispositivo reinicia automáticamente cada 23 horas
+
+🔧 OTA (Actualización remota)
+Este firmware permite actualizaciones OTA a través del puerto mDNS esp32-dual.local. Puedes usar la opción "OTA" desde el IDE de Arduino para cargar nuevas versiones del código sin necesidad de cable USB.
+
+📸 Vista general de funcionamiento
+Se conecta a red WiFi conocida.
+
+Crea un punto de acceso propio (modo AP) para diagnóstico.
+
+Inicializa sensores BME680, DS18B20, y PM2.5.
+
+Se sincroniza con NTP.
+
+Envía datos por MQTT periódicamente.
+
+Muestra estados del sistema por LED NeoPixel.
+
+Permite actualizaciones OTA.
